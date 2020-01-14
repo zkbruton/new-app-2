@@ -29,7 +29,6 @@ comtypes==1.1.7
 connexion==2.4.0
 contextlib2==0.5.5
 cryptography==2.7
-curl==7.65.2
 cycler==0.10.0
 cython==0.29.12
 cytoolz==0.10.0
