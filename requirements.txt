@@ -107,7 +107,6 @@ numpydoc==0.9.1
 olefile==0.46
 openapi-spec-validator==0.2.8
 openpyxl==2.6.2
-openssl==1.1.1c
 packaging==19.0
 pandas==0.24.2
 pandoc==2.2.3.2
