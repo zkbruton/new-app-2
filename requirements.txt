@@ -72,7 +72,6 @@ jdcal==1.4.1
 jedi==0.13.3
 jinja2==2.10.1
 joblib==0.13.2
-jpeg==9b
 json5==0.8.4
 jsonschema==3.0.1
 jupyter==1.0.0
@@ -104,7 +103,6 @@ m2w64-gcc-libgfortran==5.3.0
 m2w64-gcc-libs-core==5.3.0
 m2w64-gcc-libs==5.3.0
 m2w64-gmp==6.1.0
-m2w64-libwinpthread-git==5.0.0.4634.697f757
 markupsafe==1.1.1
 matplotlib==3.1.0
 mccabe==0.6.1
@@ -118,7 +116,6 @@ mock==3.0.5
 more-itertools==7.0.0
 mpmath==1.1.0
 msgpack-python==0.6.1
-msys2-conda-epoch==20160418
 multipledispatch==0.6.0
 navigator-updater==0.2.1
 nbconvert==5.5.0
@@ -145,7 +142,6 @@ partd==1.0.0
 path.py==12.0.1
 pathlib2==2.3.4
 patsy==0.5.1
-pdfminer==20191125
 pep8==1.7.1
 pickleshare==0.7.5
 pillow==6.1.0
@@ -245,7 +241,6 @@ traitlets==4.3.2
 unicodecsv==0.14.1
 urllib3==1.24.2
 vc==14.1
-vs2015_runtime==14.15.26706
 wcwidth==0.1.7
 webencodings==0.5.1
 werkzeug==0.15.4
