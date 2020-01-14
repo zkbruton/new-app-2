@@ -156,7 +156,6 @@ pywavelets==1.0.3
 pywinpty==0.5.5
 pyyaml==5.1.1
 pyzmq==18.0.0
-qt==5.9.7
 qtawesome==0.5.7
 qtconsole==4.5.1
 qtpy==1.8.0
