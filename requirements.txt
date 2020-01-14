@@ -15,7 +15,6 @@ backports.weakref==1.0.post1
 beautifulsoup4==4.7.1
 bitarray==0.9.3
 bkcharts==0.2
-blas==1.0
 bleach==3.1.0
 blosc==1.16.3
 bokeh==1.2.0
