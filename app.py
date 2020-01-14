@@ -28,7 +28,8 @@ server = app.server
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
 
 app.layout = html.Div([
-        html.H2('Testing Grounds')
+        html.H2('Testing Grounds'),
+        html.H2(df_spt.columns)
 ])
 
 if __name__ == '__main__':
