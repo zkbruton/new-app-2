@@ -26,10 +26,11 @@ app = dash.Dash(__name__)
 server = app.server
 
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
-
+a=list(df_spt.columns.values)
+a=str(a)
 app.layout = html.Div([
         html.H2('Testing Grounds'),
-        html.H2(df_spt.columns)
+        html.H2(a)
 ])
 
 if __name__ == '__main__':
