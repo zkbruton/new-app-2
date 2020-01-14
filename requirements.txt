@@ -54,7 +54,6 @@ gevent==1.4.0
 glob2==0.7
 greenlet==0.4.15
 h5py==2.9.0
-hdf5==1.10.4
 heapdict==1.0.0
 html5lib==1.0.1
 icc_rt==2019.0.0
