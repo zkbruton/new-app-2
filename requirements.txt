@@ -27,7 +27,6 @@ cloudpickle==1.2.1
 colorama==0.4.1
 comtypes==1.1.7
 connexion==2.4.0
-console_shortcut==0.1.1
 contextlib2==0.5.5
 cryptography==2.7
 curl==7.65.2
