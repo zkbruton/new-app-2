@@ -210,7 +210,6 @@ wincertstore==0.2
 wrapt==1.11.2
 xlrd==1.2.0
 xlsxwriter==1.1.8
-xlwings==0.15.8
 xlwt==1.3.0
 xz==5.2.4
 yaml==0.1.7
