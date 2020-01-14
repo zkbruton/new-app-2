@@ -19,25 +19,12 @@ server = app.server
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
 
 app.layout = html.Div([
-    html.Div([
         html.H2('Zika Explorer'),
-        html.Div([], className = 'one column'),
-        html.Div([
-            html.Div([
-                html.P('Country')
-            ], className = 'row'),
-            html.Div([
-                dcc.Dropdown(
+        dcc.Dropdown(
                     id = 'countryPicker',
                     options = [{'label': i, 'value': i} for i in zika['integer'].unique()],
                     multi = True,
-                    value = zika['integer'].unique()
-                )
-            ], className = 'row')
-
-        ], className = 'seven columns'),
-        html.Div([], className = 'one column')
-    ], className = 'row')
+                    value = zika['integer'].unique())
 ])
 
 if __name__ == '__main__':
