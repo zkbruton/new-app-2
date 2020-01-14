@@ -7,6 +7,7 @@ import datetime
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_table as dt
 import os
 from dash.dependencies import Input, Output
 
@@ -26,11 +27,18 @@ app = dash.Dash(__name__)
 server = app.server
 
 app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
-a=list(df_spt.columns.values)
-a=str(a)
+
 app.layout = html.Div([
         html.H2('Testing Grounds'),
-        html.H2(a)
+        dt.DataTable(id='table',
+                   style_table={'overflowX':'scroll'},
+                   style_cell={'minWidth':'45px'},
+                   style_header={'backgroundColor':'#f8f8f8','fontWeight':'bold'},
+                   style_data_conditional=[{'if':{'row_index':'odd'},
+                                            'backgroundColor':'#f8f8f8'}],
+                   columns=[{"name": i, "id": i} for i in df_spt.columns],
+                   style_as_list_view=True,
+                   data=df_spt.head(10).to_dict('records'))
 ])
 
 if __name__ == '__main__':
