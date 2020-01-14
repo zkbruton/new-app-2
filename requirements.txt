@@ -57,7 +57,6 @@ h5py==2.9.0
 heapdict==1.0.0
 html5lib==1.0.1
 icc_rt==2019.0.0
-icu==58.2
 idna==2.8
 imageio==2.5.0
 imagesize==1.1.0
