@@ -140,7 +140,6 @@ pyodbc==4.0.26
 pyopenssl==19.0.0
 pyparsing==2.4.0
 pypdf2==1.26.0
-pyqt==5.9.2
 pyreadline==2.1
 pyrsistent==0.14.11
 pysocks==1.7.0
