@@ -86,7 +86,6 @@ lazy-object-proxy==1.4.1
 llvmlite==0.29.0
 locket==0.2.0
 lxml==4.3.4
-lz4-c==1.8.1.2
 lzo==2.10
 m2w64-gcc-libgfortran==5.3.0
 m2w64-gcc-libs-core==5.3.0
