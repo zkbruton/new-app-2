@@ -10,7 +10,9 @@ import dash_html_components as html
 import os
 from dash.dependencies import Input, Output
 
-zika = pd.read_csv('https://raw.githubusercontent.com/chrisalbon/simulated_datasets/master/data.xlsx')
+zika = pd.read_csv('https://raw.githubusercontent.com/chrisalbon/simulated_datasets/master/data.xlsx',
+                 sep='\t'
+                  )
 
 app = dash.Dash(__name__)
 server = app.server
