@@ -62,7 +62,6 @@ imageio==2.5.0
 imagesize==1.1.0
 importlib_metadata==0.17
 inflection==0.3.1
-intel-openmp==2019.4
 ipykernel==5.1.1
 ipython==7.6.1
 ipython_genutils==0.2.0
