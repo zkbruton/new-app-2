@@ -3,7 +3,7 @@
 import plotly.graph_objs as go
 import numpy as np
 import pandas as pd
-#import datetime
+import datetime
 
 import dash
 import dash_core_components as dcc
