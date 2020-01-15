@@ -18,11 +18,18 @@ repair_data_copy=pd.read_csv('https://raw.githubusercontent.com/zkbruton/csv-fil
 nb_data=pd.read_csv('https://raw.githubusercontent.com/zkbruton/csv-files/master/nb_data.csv',index_col=0)
 nb_data_copy=pd.read_csv('https://raw.githubusercontent.com/zkbruton/csv-files/master/nb_data_copy.csv',index_col=0)
 con_data=pd.read_csv('https://raw.githubusercontent.com/zkbruton/csv-files/master/con_data.csv',index_col=0)
+
 df_spt['Date']=pd.to_datetime(df_spt['Date'])
 repair_data['Date']=pd.to_datetime(repair_data['Date'])
 repair_data_copy['Date']=pd.to_datetime(repair_data_copy['Date'])
 nb_data['Date']=pd.to_datetime(nb_data['Date'])
 nb_data_copy['Date']=pd.to_datetime(nb_data_copy['Date'])
+
+df_spt['Date']=df_spt['Date'].values.astype('datetime64[D]')
+repair_data['Date']=repair_data['Date'].values.astype('datetime64[D]')
+repair_data_copy['Date']=repair_data_copy['Date'].values.astype('datetime64[D]')
+nb_data['Date']=nb_data['Date'].values.astype('datetime64[D]')
+nb_data_copy['Date']=nb_data_copy['Date'].values.astype('datetime64[D]')
 
 #Unique Customer Names
 cust_names=pd.concat([con_data['Customer'],repair_data['Customer'],nb_data['Customer']]).unique()
