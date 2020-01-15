@@ -181,9 +181,6 @@ sphinxcontrib-jsmath==1.0.1
 sphinxcontrib-qthelp==1.0.2
 sphinxcontrib-serializinghtml==1.1.3
 sphinxcontrib-websupport==1.1.2
-spyder-kernels==0.5.1
-spyder==3.3.6
-sqlalchemy==1.3.5
 statsmodels==0.10.0
 swagger-ui-bundle==0.0.6
 sympy==1.4
@@ -199,7 +196,6 @@ urllib3==1.24.2
 wcwidth==0.1.7
 webencodings==0.5.1
 werkzeug==0.15.4
-wheel==0.33.4
 widgetsnbextension==3.5.0
 wrapt==1.11.2
 xlrd==1.2.0
