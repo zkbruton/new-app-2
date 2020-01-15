@@ -36,10 +36,12 @@ for i in range(len(cust_names)):
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 external_stylesheets1 = ['https://codepen.io/zkbruton/pen/JjovEXN.css']
 
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets1)
+
+#app = dash.Dash(__name__)
 server = app.server
 
-app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
+#app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
 
 app.layout = html.Div([
         html.H2('Testing Grounds'),
