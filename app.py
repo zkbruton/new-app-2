@@ -1,14 +1,14 @@
-import plotly.plotly as py
-import plotly.graph_objs as go
+#import plotly.plotly as py
+#import plotly.graph_objs as go
 import numpy as np
 import pandas as pd
-import datetime
+#import datetime
 
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table as dt
-import os
+#import os
 from dash.dependencies import Input, Output
 
 df_spt=pd.read_csv('https://raw.githubusercontent.com/zkbruton/csv-files/master/df_spt.csv',index_col=0)
