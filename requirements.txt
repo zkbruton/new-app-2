@@ -136,7 +136,6 @@ pyflakes==2.1.1
 pygments==2.4.2
 pyinstaller==3.5
 pylint==2.3.1
-pyodbc==4.0.26
 pyopenssl==19.0.0
 pyparsing==2.4.0
 pypdf2==1.26.0
