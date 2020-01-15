@@ -174,7 +174,6 @@ sortedcollections==1.1.2
 sortedcontainers==2.1.0
 soupsieve==1.8
 statsmodels==0.10.0
-swagger-ui-bundle==0.0.6
 sympy==1.4
 tblib==1.4.0
 terminado==0.8.2
