@@ -101,7 +101,14 @@ def getMarks(begin, ending, Nth=40):
 
     return result
 #app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
-
+VALID_USERNAME_PASSWORD_PAIRS = {
+    'baker': 'hughes'
+}
+auth = dash_auth.BasicAuth(
+    app,
+    VALID_USERNAME_PASSWORD_PAIRS
+)
+  
 app.layout = html.Div(style={'backgroundColor': colors['background'],'width':'100%','height':'100%','top':'0px','left':'0px','z-index':'1000','position':'sticky'}, children=[
     html.H4(children='Commercial Dashboard',style={'textAlign':'center'}),
 
