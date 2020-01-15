@@ -120,7 +120,6 @@ app.layout = html.Div(style={'backgroundColor': colors['background'],'width':'10
                          ],
                 className='four columns',
                 style={'textAlign':'center'}),                
-#                style={'width': '48%', 'display': 'inline-block'}),
                 
                 html.Div([
                         html.H6('Filter by Customer'),
@@ -137,14 +136,10 @@ app.layout = html.Div(style={'backgroundColor': colors['background'],'width':'10
                                      multi=True,
                                      placeholder='Select Customers',
                                      style={'textAlign':'center'}),
-#                        html.Div(id='customer-name')
                         ],
                 className='eight columns',
                 style={'textAlign':'center'})                
-#                style={'width': '48%', 'float': 'right', 'display': 'inline-block'})
                 ],className='row'),
-        
-        
         
         html.Br(),
         html.Div(id='output-container-range-slider',style={'text-align':'center'}),
@@ -161,7 +156,6 @@ app.layout = html.Div(style={'backgroundColor': colors['background'],'width':'10
                     style={'margin-left':'auto','margin-right':'auto','width':'70%'}),
         html.Br(),
                 ],
-#                    style={'backgroundColor':'#f8f8f8','border-style':'solid','border-color':'rgb(211,211,211)','border-width':'2px','border-radius':'5px','padding':'5px'}),
                     style={'margin-left':'auto','margin-right':'auto','width':'80%','backgroundColor':'#f8f8f8','box-shadow':'2px 2px #c9c9c9','padding':'5px','border-radius':'5px'}),
 
     html.Br(),
@@ -169,18 +163,18 @@ app.layout = html.Div(style={'backgroundColor': colors['background'],'width':'10
             dcc.Tab(label='Sell Price Tracker',value='tab1',children=[
                 html.Div([
                     html.Div([html.H4('Table'),dt.DataTable(id='table',
-#                                                   style_cell={'overflow': 'hidden','textOverflow': 'ellipsis','maxWidth': 0,},
                                                    style_table={'overflowX':'scroll'},
                                                    style_cell={'minWidth':'45px'},
                                                    style_header={'backgroundColor':'#f8f8f8','fontWeight':'bold'},
                                                    style_data_conditional=[{'if':{'row_index':'odd'},
                                                                             'backgroundColor':'#f8f8f8'}],
                                                    columns=[{"name": i, "id": i} for i in df_spt.columns],
-#                                                   columns=['Part Number','Quote','Unit Cost Price','Unit Sell Price','CM','Date','Qty'],
                                                    style_as_list_view=True,
                                                    data=df_spt.head(10).to_dict('records'))
                             ], style={'text-align':'center'}, className='six columns'),
-                    html.Div([html.H4('Graph'),dcc.Graph(id='g1', figure={})], className='six columns'),
+                    html.Div([html.H4('Graph'),
+                              html.Div([dcc.Graph(id='g1', figure={})],style={'box-shadow':'2px 2px #c9c9c9'})
+                              ], className='six columns'),
                         ],style={'text-align':'center','padding': '8px'},className="row"),
                     ],style=tab_style,selected_style=tab_selected_style),
             dcc.Tab(label='Cost Model Data',value='tab2',children=[
@@ -189,7 +183,6 @@ app.layout = html.Div(style={'backgroundColor': colors['background'],'width':'10
                                 children=[html.Div([
                                             html.Div([html.H4('Table'),
                                                       dt.DataTable(id='table_repair',
-                #                                                   style_cell={'overflow': 'hidden','textOverflow': 'ellipsis','maxWidth': 0,},
                                                                    style_table={'overflowX':'scroll'},
                                                                    row_selectable="single",
                                                                    selected_rows=[],
@@ -198,12 +191,15 @@ app.layout = html.Div(style={'backgroundColor': colors['background'],'width':'10
                                                                                             'backgroundColor':'#f8f8f8'}],
                                                                    style_cell={'minWidth':'45px'},
                                                                    columns=[{"name": i, "id": i} for i in repair_data.columns],
-#                                                                   style_as_list_view=True,
                                                                    data=repair_data.head(10).to_dict('records'))
                                                     ])],style={'padding':'8px'}),
                                           html.Div([
-                                            html.Div([html.H4('Graph'),dcc.Graph(id='g_repair', figure={})], className='six columns'),
-                                            html.Div([html.H4('Donut Chart'),dcc.Graph(id='g_donut_repair', figure={})], className='six columns'),
+                                            html.Div([html.H4('Graph'),
+                                                      html.Div([dcc.Graph(id='g_repair', figure={})],style={'box-shadow':'2px 2px #c9c9c9'})
+                                                      ], className='six columns'),
+                                            html.Div([html.H4('Donut Chart'),
+                                                      html.Div([dcc.Graph(id='g_donut_repair', figure={})],style={'box-shadow':'2px 2px #c9c9c9'})
+                                                      ], className='six columns'),
                                                 ],style={'padding':'8px'},className="row"),
                                             ],style=tab_style,selected_style=tab_selected_style
                                 ),
@@ -211,7 +207,6 @@ app.layout = html.Div(style={'backgroundColor': colors['background'],'width':'10
                                 children=[html.Div([
                                             html.Div([html.H4('Table'),
                                                       dt.DataTable(id='table_nb',
-                #                                                   style_cell={'overflow': 'hidden','textOverflow': 'ellipsis','maxWidth': 0,},
                                                                    style_table={'overflowX':'scroll'},
                                                                    row_selectable="single",
                                                                    selected_rows=[],
@@ -223,8 +218,12 @@ app.layout = html.Div(style={'backgroundColor': colors['background'],'width':'10
                                                                    data=nb_data.head(10).to_dict('records'))
                                                     ])],style={'padding':'8px'}),
                                           html.Div([
-                                            html.Div([html.H4('Graph'),dcc.Graph(id='g_nb', figure={})], className='six columns'),
-                                            html.Div([html.H4('Donut Chart'),dcc.Graph(id='g_donut_nb', figure={})], className='six columns'),
+                                            html.Div([html.H4('Graph'),
+                                                      html.Div([dcc.Graph(id='g_nb', figure={})],style={'box-shadow':'2px 2px #c9c9c9'})
+                                                      ], className='six columns'),
+                                            html.Div([html.H4('Donut Chart'),
+                                                      html.Div([dcc.Graph(id='g_donut_nb', figure={})],style={'box-shadow':'2px 2px #c9c9c9'})
+                                                      ], className='six columns'),
                                                 ],style={'padding':'8px'},className="row"),
                                             ],style=tab_style,selected_style=tab_selected_style
                                 ),
