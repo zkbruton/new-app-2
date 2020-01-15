@@ -24,6 +24,18 @@ repair_data_copy['Date']=pd.to_datetime(repair_data_copy['Date'])
 nb_data['Date']=pd.to_datetime(nb_data['Date'])
 nb_data_copy['Date']=pd.to_datetime(nb_data_copy['Date'])
 
+#Unique Customer Names
+cust_names=pd.concat([con_data['Customer'],repair_data['Customer'],nb_data['Customer']]).unique()
+cust_names=list(cust_names)
+ll=[None]*len(cust_names)
+for i in range(len(cust_names)):
+    ll[i]={'label':cust_names[i],'value':cust_names[i]}
+
+#Dash App creation
+    
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets1 = ['https://codepen.io/zkbruton/pen/JjovEXN.css']
+
 app = dash.Dash(__name__)
 server = app.server
 
