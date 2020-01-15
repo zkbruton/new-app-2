@@ -243,6 +243,288 @@ app.layout = html.Div(style={'backgroundColor': colors['background'],'width':'10
     html.Div(id='tabs-content')
 ])
 
+##Callback for Customer Selection
+@app.callback(
+    Output(component_id='customer', component_property='value'),
+    [Input(component_id='radio_1', component_property='value')]
+)    
+def update_cust_name(value):
+    if value == 'All':
+        return cust_names
+    elif value == 'Big 5':
+        return ['TOTAL E&P','CNOOC prev Nexen','Chevron now Ithaca','Chrysaor prev COP','Apache']
+    else:
+        return
+
+    
+##Callbacks for Sell Price Tracker
+@app.callback(
+    dash.dependencies.Output('output-container-range-slider', 'children'),
+    [dash.dependencies.Input('year_slider', 'value')])
+def update_output(value):
+    value=unixToDatetime(value)
+    value1="start date of "+value[0].strftime("%Y-%b-%d")+" and end date of "+value[1].strftime("%Y-%b-%d")
+    return 'Selected {}.'.format(value1)
+
+@app.callback(
+    Output(component_id='my-div', component_property='children'),
+    [Input(component_id='my-id', component_property='value')]
+)
+def update_output_div(input_value):
+    return 'PN entered is "{}"'.format(input_value)
+
+#@app.callback(
+#    Output(component_id='customer-name', component_property='children'),
+#    [Input(component_id='customer', component_property='value')]
+#)
+#def update_output_cust(input_value):
+#    return 'Customer Name entered is "{}"'.format(input_value)
+
+@app.callback(
+    Output(component_id='table', component_property='data'),
+    [Input(component_id='my-id', component_property='value'),
+     Input(component_id='year_slider', component_property='value')]
+)
+def update_gen_table(input_value,date_span):
+    input_value=str(input_value)
+    date_span=pd.to_datetime(date_span,unit='s')
+    df_spt1=df_spt[(df_spt['Date'] >= date_span[0]) & (df_spt['Date'] <= date_span[1])]
+    df_spt1['Date'] = df_spt1['Date'].dt.date
+    return df_spt1[df_spt1['Part Number']==input_value].to_dict('records')
+    
+@app.callback(
+    Output(component_id='g1', component_property='figure'),
+    [Input(component_id='my-id', component_property='value'),
+     Input(component_id='year_slider', component_property='value')]
+)
+def update_graph_spt(input_value,date_span):
+    input_value=str(input_value)
+    date_span=pd.to_datetime(date_span,unit='s')
+    df_spt1=df_spt[(df_spt['Date'] >= date_span[0]) & (df_spt['Date'] <= date_span[1])]
+    df=df_spt1[df_spt1['Part Number']==input_value]
+    df=df.reset_index()
+    text_hold=[None]*len(df.index)
+    for i in range(len(df.index)):
+        text_hold[i]='Quote = '+str(df.at[i,'Quote'])+'<br>Unit Cost Price = '+str(df.at[i,'Unit Cost Price'])+'<br>Unit Sell Price = '+str(df.at[i,'Unit Sell Price'])+'<br>Contribution Margin = '+str(df.at[i,'CM'])
+    maxx=df['CM'].max()
+    fig=go.Figure()
+    fig.add_trace(go.Scatter(x=df['Date'],y=df['Unit Cost Price'],mode='markers',marker=dict(size=df['CM'],sizemode='area',sizeref=2.*maxx/(40.**2),sizemin=4),name='Unit Cost Price',text=text_hold))
+    fig.layout.plot_bgcolor='#f8f8f8'
+    fig.layout.paper_bgcolor='#f8f8f8'
+    fig.update_layout(xaxis_title='Date',yaxis_title='Unit Cost Price')
+    fig.update_layout(title={'text':'Sell Price Tracker','y':0.9,'x':0.5,'xanchor':'center','yanchor':'top'},font=dict(size=14))    
+    fig.update_xaxes(showline=True,showgrid=True, gridwidth=1, gridcolor='#e4e4e4',linecolor='#c9c9c9',zerolinecolor='#e4e4e4')
+    fig.update_yaxes(showline=True,showgrid=True, gridwidth=1, gridcolor='#e4e4e4',linecolor='#c9c9c9',zerolinecolor='#e4e4e4')
+    return fig
+
+@app.callback(
+    Output(component_id='table_repair', component_property='data'),
+    [Input(component_id='my-id', component_property='value'),
+     Input(component_id='year_slider', component_property='value'),
+     Input(component_id='customer', component_property='value')]
+)
+def update_rep_table(input_value,date_span,cust_name):
+    if not cust_name:
+        cust_name=cust_names
+    input_value=str(input_value)
+    date_span=pd.to_datetime(date_span,unit='s')
+    repair_data1=repair_data[(repair_data['Date'] >= date_span[0]) & (repair_data['Date'] <= date_span[1])]
+    repair_data1=repair_data1[repair_data1['Customer'].isin(cust_name)]
+    return repair_data1[repair_data1['PNs']==input_value].to_dict('records')
+    
+@app.callback(
+    Output(component_id='g_repair', component_property='figure'),
+    [Input(component_id='my-id', component_property='value'),
+     Input(component_id='year_slider', component_property='value'),
+     Input('table_repair', 'selected_rows'),
+     Input(component_id='customer', component_property='value')]
+)
+def update_graph_rep(input_value,date_span,selected_rows,cust_name):
+    input_value=str(input_value)
+    if not selected_rows:
+        selected_rows=[1000]
+    selected_rows=''.join(str(v) for v in selected_rows)
+    selected_rows=int(selected_rows)
+    date_span=pd.to_datetime(date_span,unit='s')
+    repair_data1=repair_data[(repair_data['Date'] >= date_span[0]) & (repair_data['Date'] <= date_span[1])]
+    if not cust_name:
+        cust_name=cust_names
+    repair_data1=repair_data1[repair_data1['Customer'].isin(cust_name)]
+    df_rep=repair_data1[repair_data1['PNs']==input_value]
+    df_rep['Text']='Quote = '+df_rep['Excel Name'].map(str)+'<br>Unit Cost Price = '+df_rep['Unit Cost'].map(str)+'<br>Unit Sell Price = '+df_rep['Total Unit Sell - No Spares'].map(str)+'<br>Contribution Margin = '+df_rep['Margin'].map(str)
+    text_hold=df_rep['Text'].tolist()
+    maxx=df_rep['Margin'].max()
+    colage=[1]*len(df_rep['Date'])
+    if selected_rows < len(df_rep['Date']):
+        colage=[1]*len(df_rep['Date'])
+        colage[selected_rows]=2
+    fig=go.Figure()
+    fig.add_trace(go.Scatter(x=df_rep['Date'],y=df_rep['Unit Cost'],mode='markers',marker=dict(size=df_rep['Margin'],sizemode='area',sizeref=2.*maxx/(40.**2),sizemin=4,color=colage),name='Unit Cost',text=text_hold))
+    fig.layout.plot_bgcolor='#f8f8f8'
+    fig.layout.paper_bgcolor='#f8f8f8'
+    fig.update_layout(xaxis_title='Date',yaxis_title='Unit Cost Price')
+    fig.update_layout(title={'text':'Repair Cost Models','y':0.9,'x':0.5,'xanchor':'center','yanchor':'top'},font=dict(size=14))    
+    fig.update_xaxes(showline=True,showgrid=True, gridwidth=1, gridcolor='#e4e4e4',linecolor='#c9c9c9',zerolinecolor='#e4e4e4')
+    fig.update_yaxes(showline=True,showgrid=True, gridwidth=1, gridcolor='#e4e4e4',linecolor='#c9c9c9',zerolinecolor='#e4e4e4')
+    return fig    
+
+@app.callback(
+    Output('g_donut_repair', 'figure'),
+    [Input(component_id='my-id', component_property='value'),
+     Input(component_id='year_slider', component_property='value'),
+     Input('table_repair', 'selected_rows'),
+     Input(component_id='customer', component_property='value')])
+def update_donut_rep(input_value,date_span,selected_rows,cust_name):
+    input_value=str(input_value)
+    if not selected_rows:
+        selected_rows=[0]
+    selected_rows=''.join(str(v) for v in selected_rows)
+    selected_rows=int(selected_rows)
+    date_span=pd.to_datetime(date_span,unit='s')
+    repair_data2=repair_data_copy[(repair_data_copy['Date'] >= date_span[0]) & (repair_data_copy['Date'] <= date_span[1])].reset_index(drop=True)
+    if not cust_name:
+        cust_name=cust_names
+    repair_data2=repair_data2[repair_data2['Customer'].isin(cust_name)]
+    hold=repair_data2['PNs']==input_value
+    rd2=repair_data2[hold].reset_index(drop=True)
+    if len(rd2.index)==0:
+        x1,x2,x3,x4,x5,x6=1,1,1,1,1,1
+        z1=z2=z3=z4=z5=z6='Placement Value'
+    else:
+        x1=rd2.loc[selected_rows,'Material']
+        x2=rd2.loc[selected_rows,'Bought Out']
+        x3=rd2.loc[selected_rows,'Sub-Con']
+        x4=rd2.loc[selected_rows,'Machining']
+        x5=rd2.loc[selected_rows,'Fabrication']
+        x6=rd2.loc[selected_rows,'Test & Assy']
+        z1=rd2.loc[selected_rows,'Material - Note']
+        z2=rd2.loc[selected_rows,'Bought Out - Note']
+        z3=rd2.loc[selected_rows,'Sub-Con - Note']
+        z4=rd2.loc[selected_rows,'Machining - Note']
+        z5=rd2.loc[selected_rows,'Fabrication - Note']
+        z6=rd2.loc[selected_rows,'Test & Assy - Note']
+    z=[z1,z2,z3,z4,z5,z6]
+    c=':'
+    for i in range(len(z)):
+        zz=str(z[i])
+        foo=[pos for pos, char in enumerate(zz) if char == c]
+        if len(foo)>1:
+            foo1=foo[1]+1
+            z[i]=z[i][:foo1]+'<br>'+z[i][foo1:]
+    fig=go.Figure(data=[go.Pie(labels=['Material','Bought Out','Sub-Con','Machining','Fabrication','Test & Assy'], values=[x1,x2,x3,x4,x5,x6],hole=.3,hovertext=z,hoverinfo="text")])
+    fig.layout.plot_bgcolor='#f8f8f8'
+    fig.layout.paper_bgcolor='#f8f8f8'
+    fig.update_layout(title={'text':'Cost Breakdown','y':0.9,'x':0.5,'xanchor':'center','yanchor':'top'},font=dict(size=14)) 
+    return fig
+
+#New Build Tab    
+@app.callback(
+    Output(component_id='table_nb', component_property='data'),
+    [Input(component_id='my-id', component_property='value'),
+     Input(component_id='year_slider', component_property='value'),
+     Input(component_id='customer', component_property='value')]
+)
+def update_nb_table(input_value,date_span,cust_name):
+    input_value=str(input_value)
+    date_span=pd.to_datetime(date_span,unit='s')
+    nb_data1=nb_data[(nb_data['Date'] >= date_span[0]) & (nb_data['Date'] <= date_span[1])]
+    if not cust_name:
+        cust_name=cust_names
+    nb_data1=nb_data1[nb_data1['Customer'].isin(cust_name)]
+    return nb_data1[nb_data1['PNs']==input_value].to_dict('records')
+   
+@app.callback(
+    Output(component_id='g_nb', component_property='figure'),
+    [Input(component_id='my-id', component_property='value'),
+     Input(component_id='year_slider', component_property='value'),
+     Input('table_nb', 'selected_rows'),
+     Input(component_id='customer', component_property='value')]
+)
+def update_graph_nb(input_value,date_span,selected_rows,cust_name):
+    input_value=str(input_value)
+    if not selected_rows:
+        selected_rows=[1000]
+    selected_rows=''.join(str(v) for v in selected_rows)
+    selected_rows=int(selected_rows)
+    date_span=pd.to_datetime(date_span,unit='s')
+    nb_data1=nb_data[(nb_data['Date'] >= date_span[0]) & (nb_data['Date'] <= date_span[1])]
+    df_nb=nb_data1[nb_data1['PNs']==input_value]
+    if not cust_name:
+        cust_name=cust_names
+    df_nb=df_nb[df_nb['Customer'].isin(cust_name)]
+    df_nb['Text']='Quote = '+df_nb['Excel Name'].map(str)+'<br>Unit Cost Price = '+df_nb['Unit Cost'].map(str)+'<br>Unit Sell Price = '+df_nb['Total Unit Sell - No Spares'].map(str)+'<br>Contribution Margin = '+df_nb['Margin'].map(str)
+    text_hold=df_nb['Text'].tolist()
+    maxx=df_nb['Margin'].max()
+    colage=[1]*len(df_nb['Date'])
+    if selected_rows < len(df_nb['Date']):
+        colage=[1]*len(df_nb['Date'])
+        colage[selected_rows]=2
+    fig=go.Figure()
+    fig.add_trace(go.Scatter(x=df_nb['Date'],y=df_nb['Unit Cost'],mode='markers',marker=dict(size=df_nb['Margin'],sizemode='area',sizeref=2.*maxx/(40.**2),sizemin=4,color=colage),name='Unit Cost',text=text_hold))
+    fig.layout.plot_bgcolor='#f8f8f8'
+    fig.layout.paper_bgcolor='#f8f8f8'
+    fig.update_layout(xaxis_title='Date',yaxis_title='Unit Cost Price')
+    fig.update_layout(title={'text':'New Build Cost Models','y':0.9,'x':0.5,'xanchor':'center','yanchor':'top'},font=dict(size=14))    
+    fig.update_xaxes(showline=True,showgrid=True, gridwidth=1, gridcolor='#e4e4e4',linecolor='#c9c9c9',zerolinecolor='#e4e4e4')
+    fig.update_yaxes(showline=True,showgrid=True, gridwidth=1, gridcolor='#e4e4e4',linecolor='#c9c9c9',zerolinecolor='#e4e4e4')
+    return fig
+
+@app.callback(
+    Output('g_donut_nb', 'figure'),
+    [Input(component_id='my-id', component_property='value'),
+     Input(component_id='year_slider', component_property='value'),
+     Input('table_nb', 'selected_rows'),
+     Input(component_id='customer', component_property='value')])
+def update_donut_gb(input_value,date_span,selected_rows,cust_name):
+    input_value=str(input_value)
+    if not selected_rows:
+        selected_rows=[0]
+    selected_rows=''.join(str(v) for v in selected_rows)
+    selected_rows=int(selected_rows)
+    date_span=pd.to_datetime(date_span,unit='s')
+    nb_data2=nb_data_copy[(nb_data_copy['Date'] >= date_span[0]) & (nb_data_copy['Date'] <= date_span[1])].reset_index(drop=True)
+    if not cust_name:
+        cust_name=cust_names
+    nb_data2=nb_data2[nb_data2['Customer'].isin(cust_name)]
+    hold=nb_data2['PNs']==input_value
+    nbd2=nb_data2[hold].reset_index(drop=True)
+    if len(nbd2.index)==0:
+        x1,x2,x3,x4,x5,x6=1,1,1,1,1,1
+        z1=z2=z3=z4=z5=z6='Placement Value'
+    else:
+        x1=nbd2.loc[selected_rows,'Material']
+        x2=nbd2.loc[selected_rows,'Bought Out']
+        x3=nbd2.loc[selected_rows,'Sub-Con']
+        x4=nbd2.loc[selected_rows,'Machining']
+        x5=nbd2.loc[selected_rows,'Fabrication']
+        x6=nbd2.loc[selected_rows,'Test & Assy']
+        z1=nbd2.loc[selected_rows,'Material - Note']
+        z2=nbd2.loc[selected_rows,'Bought Out - Note']
+        z3=nbd2.loc[selected_rows,'Sub-Con - Note']
+        z4=nbd2.loc[selected_rows,'Machining - Note']
+        z5=nbd2.loc[selected_rows,'Fabrication - Note']
+        z6=nbd2.loc[selected_rows,'Test & Assy - Note']
+    z=[z1,z2,z3,z4,z5,z6]
+    fig=go.Figure(data=[go.Pie(labels=['Material','Bought Out','Sub-Con','Machining','Fabrication','Test & Assy'], values=[x1,x2,x3,x4,x5,x6],hole=.3,hovertext=z,hoverinfo="text")])
+    fig.layout.plot_bgcolor='#f8f8f8'
+    fig.layout.paper_bgcolor='#f8f8f8'
+    fig.update_layout(title={'text':'Cost Breakdown','y':0.9,'x':0.5,'xanchor':'center','yanchor':'top'},font=dict(size=14))       
+    return fig
+
+#Contract Tab    
+@app.callback(
+    Output(component_id='table_contract', component_property='data'),
+    [Input(component_id='my-id', component_property='value'),
+     Input(component_id='customer', component_property='value')]
+)
+def update_con_table(input_value,cust_name):
+    input_value=str(input_value)
+    if not cust_name:
+        cust_name=cust_names
+    con_data1=con_data[con_data['Customer'].isin(cust_name)]
+    return con_data1[con_data1['Part Number']==input_value].to_dict('records')
+
+
 if __name__ == '__main__':
     app.run_server(debug=True)
 
