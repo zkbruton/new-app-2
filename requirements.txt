@@ -152,7 +152,6 @@ python-dateutil==2.8.0
 pytz==2019.1
 pyvttbl==0.5.2.2
 pywavelets==1.0.3
-pywinpty==0.5.5
 pyyaml==5.1.1
 pyzmq==18.0.0
 qtawesome==0.5.7
