@@ -40,7 +40,59 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets1)
 
 #app = dash.Dash(__name__)
 server = app.server
+styles = {
+    'pre': {
+        'border': 'thin lightgrey solid',
+        'overflowX': 'scroll'
+    }
+}
 
+colors = {
+    'background': '#f1f1f1',
+    'text': '#7FDBFF'
+}
+
+tabs_styles = {
+    'height': '44px'
+}
+tab_style = {
+    'borderBottom': '1px solid #d6d6d6',
+    'padding': '6px',
+    'backgroundColor': '#f8f8f8'
+}
+
+tab_selected_style = {
+    'borderTop': '1px solid #d6d6d6',
+    'borderBottom': '1px solid #d6d6d6',
+    'padding': '6px',
+    'backgroundColor': '#f8f8f8',
+    'fontWeight': 'bold'
+}
+
+
+    
+#daterange = pd.date_range(start='2016',end='2020',freq='W')
+
+def unixTimeMillis(dt):
+    ''' Convert datetime to unix timestamp '''
+    return int(time.mktime(dt.timetuple()))
+
+def unixToDatetime(unix):
+    ''' Convert unix timestamp to datetime. '''
+    return pd.to_datetime(unix,unit='s')
+
+def getMarks(begin, ending, Nth=40):
+    ''' Returns the marks for labeling. 
+        Every Nth value will be used.
+    '''
+    daterange = pd.date_range(start=begin,end=ending, freq='W')
+    result = {}
+    for i, date in enumerate(daterange):
+        if(i%Nth == 1):
+            # Append value to dict
+            result[unixTimeMillis(date)] = str(date.strftime('%Y-%m-%d'))
+
+    return result
 #app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
 
 app.layout = html.Div([
