@@ -43,9 +43,9 @@ for i in range(len(cust_names)):
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 external_stylesheets1 = ['https://codepen.io/zkbruton/pen/JjovEXN.css']
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+#app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-#app = dash.Dash(__name__)
+app = dash.Dash(__name__)
 server = app.server
 styles = {
     'pre': {
@@ -100,7 +100,9 @@ def getMarks(begin, ending, Nth=40):
             result[unixTimeMillis(date)] = str(date.strftime('%Y-%m-%d'))
 
     return result
-#app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
+
+app.css.append_css({"external_url": "https://codepen.io/zkbruton/pen/JjovEXN.css"})
+
 VALID_USERNAME_PASSWORD_PAIRS = {
     'baker': 'hughes'
 }
